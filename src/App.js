@@ -9,8 +9,6 @@ class Home extends Component {
   }
 }
  
-export default Home;
-
 class App extends Component {
   state = {  }
   render() { 
@@ -26,12 +24,15 @@ class App extends Component {
       <section className='main'></section>
       <Switch>
         <Route exact path='/' component={Home}/>
-        <Route path='/signin'>
-          <Auth type='signin'/>
-        </Route>
-        <Route path='/signup'>
-          <Auth type='signup'/>
-        </Route>
+        <Route path='/signin'
+          render={(routerProps) => (
+            <Auth type='signin'/>
+          )}/>
+      
+      <Route path='/signup'
+          render={(routerProps) => (
+            <Auth type='signup'/>
+          )}/>
       </Switch>
       </BrowserRouter>
      );
