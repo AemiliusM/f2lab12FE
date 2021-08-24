@@ -1,7 +1,9 @@
 
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';
+import { BrowserRouter, Switch, Route, NavLink, Redirect} from 'react-router-dom';
 import Auth from './Auth.js';
+import ToDos from './Tdods.js';
+
 class Home extends Component {
   state = {  }
   render() { 
@@ -10,7 +12,10 @@ class Home extends Component {
 }
  
 class App extends Component {
-  state = {  }
+  state = { token: localStorage.getItem('TOKEN') };
+  setToken = (val) => {
+    this.setState({token: val });
+  };
   render() { 
     return ( 
       <BrowserRouter>
@@ -25,14 +30,18 @@ class App extends Component {
       <Switch>
         <Route exact path='/' component={Home}/>
         <Route path='/signin'
-          render={(routerProps) => (
-            <Auth type='signin'/>
+          render={(...routerProps) => (
+            <Auth setToken={this.setToken}
+             type='signin'/>
           )}/>
       
       <Route path='/signup'
-          render={(routerProps) => (
-            <Auth type='signup'/>
+          render={(...routerProps) => (
+            <Auth setToken={this.setToken}
+             type='signup'/>
           )}/>
+          <Route path='/todos' render={(routerProps) => this.state.token ? 
+          (<ToDos {...routerProps}/>) : (<Redirect to='/signin'/>)}/>
       </Switch>
       </BrowserRouter>
      );
