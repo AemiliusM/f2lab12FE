@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route, NavLink, Redirect} from 'react-router-dom';
+import Auth from './Auth.js';
+import ToDos from './Todos.js';
+
+class Home extends Component {
+  state = {  }
+  render() { 
+    return ( <h1>Home Page</h1> );
+  }
 }
-
+ 
+class App extends Component {
+  state = { token: localStorage.getItem('TOKEN') };
+  setToken = (val) => {
+    this.setState({token: val });
+  };
+  render() { 
+    return ( 
+      <BrowserRouter>
+      <header>
+        <NavLink to='/' exact>
+          Home
+        </NavLink>
+        <NavLink to='/signin'>Sign In</NavLink>
+        <NavLink to='/signup'>Sign Up</NavLink>
+      </header>
+      <section className='main'></section>
+      <Switch>
+        <Route exact path='/' component={Home}/>
+        <Route path='/signin'
+          render={(routerProps) => (
+            <Auth setToken={this.setToken}
+             type='signin'
+             {...routerProps}
+             />
+          )}/>
+      
+      <Route path='/signup'
+          render={(routerProps) => (
+            <Auth setToken={this.setToken}
+             type='signup'
+             {...routerProps}
+             />
+          )}/>
+          <Route path='/todos' render={(routerProps) => this.state.token ? 
+          (<ToDos {...routerProps}/>) : (<Redirect to='/signin'/>)}/>
+      </Switch>
+      </BrowserRouter>
+     );
+  }
+}
+ 
 export default App;
