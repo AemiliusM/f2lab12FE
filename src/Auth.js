@@ -13,7 +13,6 @@ class Auth extends Component {
             password: this.state.password},
             this.props.type
         );
-        console.log(token);
         this.props.setToken(token);
         this.props.history.push('/todos');
     };
