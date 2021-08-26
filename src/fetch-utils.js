@@ -43,7 +43,7 @@ export async function createTodo(token, todo){
     return data;
 };
 
-export async function toggleCompleted(token, todo){
+export async function updateTodo(token, todo){
     const todoURL = `${URL}/api/todos/${todo.id}`;
     const resp = await fetch(todoURL, {
         method: 'PUT',

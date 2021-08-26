@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createTodo, getToDos, toggleCompleted } from './fetch-utils';
+import { createTodo, getToDos, updateTodo } from './fetch-utils';
 
 class ToDos extends Component {
     state = { todos: [] }
@@ -7,6 +7,12 @@ class ToDos extends Component {
         const data = await getToDos(this.props.token)
         this.setState({ todos: data })
     }
+
+    fetchTodos = async () => {
+        const data = await getToDos(this.props.token);
+        this.setState({todos: data})
+    }
+
     handleSubmit = async (e) => {
         e.preventDefault();
         const data = await createTodo(this.props.token, {todo: this.state.newToDo, completed: false});
@@ -16,7 +22,7 @@ class ToDos extends Component {
     };
     handleCompleted = async (todo) => {
        todo.completed = !todo.completed;
-        const data = await toggleCompleted(this.props.token, todo);
+        await updateTodo(this.props.token, todo); 
         this.fetchTodos();
     }
    
@@ -35,7 +41,7 @@ class ToDos extends Component {
              <section>
                  <form onSubmit={this.handleSubmit}>
                      <input  type='text' onchange={(e)=>this.setState({ newToDo: e.target.value })}></input>
-                     <button></button>
+                     <button>Add To Do</button>
                  </form>
              </section>
             </> 
